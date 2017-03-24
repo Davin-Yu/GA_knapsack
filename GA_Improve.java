@@ -1,11 +1,11 @@
 package main;
 
-public class GA_Improve
+public class GA_Improve 
 {
     private final int No_chro = 16;
-    private final int loopMax = 1000;
+    private final int loopMax = 2000;
     private DoubleLinkedList _chro[] = new DoubleLinkedList[No_chro];           //First element is empty
-
+        
     private long cacuValue(DoubleLinkedList a,DataGenerator Data)
     {
         long ans = 0;
@@ -16,7 +16,7 @@ public class GA_Improve
         }
         return ans;
     }
-
+    
     private long cacuWeight(DoubleLinkedList a,DataGenerator Data)
     {
         long ans = 0;
@@ -27,9 +27,9 @@ public class GA_Improve
         }
         return ans;
     }
-
+    
     private boolean conTains(DoubleLinkedList a, int num)
-    {
+    {     
         while (a.getNext() != null)
         {
             if (a.getNext().getX() == num)
@@ -40,7 +40,7 @@ public class GA_Improve
         }
         return false;
     }
-
+        
     private int chroLength(DoubleLinkedList a)
     {
         int num = 0;
@@ -51,7 +51,7 @@ public class GA_Improve
         }
         return num;
     }
-
+    
     private void Initialize(DataGenerator Data)
     {
         for (int i=0;i<No_chro;i++)
@@ -87,7 +87,7 @@ public class GA_Improve
                 {
                     flag = false;
                 }
-
+                
                 if (count > 2*Data.n)
                 {
                     flag =false;
@@ -96,7 +96,7 @@ public class GA_Improve
             }
         }
     }
-
+    
     private DoubleLinkedList Elitism(DataGenerator Data)
     {
         int firstPosition = 0;
@@ -111,7 +111,7 @@ public class GA_Improve
         }
         return _chro[firstPosition];
     }
-
+    
     private int RankSelection(DataGenerator Data)
     {
         long chroT[] = new long[No_chro];
@@ -132,7 +132,7 @@ public class GA_Improve
                     tempx = chroX[j]; chroX[j] = chroX[j-1]; chroX[j-1] = tempx;
                 }
             }
-
+        
         int countRou = 0;
         int rouWheel[] = new int [25+15*2+5*3+No_chro-6];
         int k = 0;
@@ -159,13 +159,13 @@ public class GA_Improve
         int AnsX = rouWheel[positionX];
         return AnsX;
     }
-
+    
     private void Mutation(DoubleLinkedList a, DataGenerator Data)
     {
         int hah = chroLength(a);
         int pickPoint = (int) (Math.random()*chroLength(a));
         int changeTo = (int) (Math.random()*Data.n);
-        if (conTains(a,changeTo))
+        if (conTains(a,changeTo))                             
         {
             while (a.getNext().getX() != changeTo)
             {
@@ -204,8 +204,8 @@ public class GA_Improve
             }
         }
     }
-
-    private boolean CrossOver(DoubleLinkedList firParent,int cutP1,
+    
+    private boolean CrossOver(DoubleLinkedList firParent,int cutP1, 
                                 DoubleLinkedList secParent,int cutP2,DoubleLinkedList offSpring, DataGenerator Data)
     {
         boolean ifSelected[] = new boolean[Data.n];
@@ -213,15 +213,15 @@ public class GA_Improve
         {
             ifSelected[i] = false;
         }
-
+        
         int count = 0;
         while (count<cutP1)
         {
             ifSelected[firParent.getNext().getX()] = true;
             firParent = firParent.getNext();
             count++;
-        }
-
+        } 
+        
         count = 0;
         int secPartLong = chroLength(secParent) - cutP2;
         while (secParent.getNext() != null)
@@ -234,7 +234,7 @@ public class GA_Improve
             secParent = secParent.getPre();
             count++;
         }
-
+        
         long totleWeight = 0;
         for (int i=0;i<Data.n;i++)
         {
@@ -243,7 +243,7 @@ public class GA_Improve
                 totleWeight = totleWeight + Data.weight[i];
             }
         }
-
+        
         if (totleWeight <= Data.T)
         {
             for (int i=0;i<Data.n;i++)
@@ -263,7 +263,7 @@ public class GA_Improve
             return false;
         }
     }
-
+    
     public long _main(DataGenerator Data)
     {
         long Ans = 0;
@@ -289,19 +289,19 @@ public class GA_Improve
                 }else if (Choose<20)
                 {
                     offSpring[dealWith] = _chro[RankSelection(Data)];
-                    Mutation(offSpring[dealWith],Data);
+                    Mutation(offSpring[dealWith],Data);     
                     dealWith++;
-                }else
+                }else 
                 {
                     int chroPar1 = RankSelection(Data);
                     int chroPar2 = RankSelection(Data);
                     while ((chroPar2 == chroPar1)&&(Data.n !=1))
                     {
                         chroPar2 = RankSelection(Data);
-                    }
+                    }                             
                     int cutPoint1 = (int) (Math.random()*chroLength(_chro[chroPar1]));
                     int cutPoint2 = (int) (Math.random()*chroLength(_chro[chroPar2]));
-
+                    
                     if (CrossOver(_chro[chroPar1],cutPoint1,_chro[chroPar2],cutPoint2,offSpring[dealWith],Data))
                     {
                         dealWith++;
